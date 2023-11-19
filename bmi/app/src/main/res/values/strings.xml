@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">BMI</string>
+    <string name="your_bmi">Your BMI: %d</string>
+</resources>
