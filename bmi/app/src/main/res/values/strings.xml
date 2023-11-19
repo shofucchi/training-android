@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">BMI</string>
-    <string name="your_bmi">Your BMI: %d</string>
+    <string name="your_bmi">Your BMI: %.1f</string>
 </resources>
