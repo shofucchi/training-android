@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import io.github.shofucchi.bmi.ui.HomeScreen
+import io.github.shofucchi.bmi.ui.BmiScreen
 import io.github.shofucchi.bmi.ui.theme.BmiTheme
 
 class MainActivity : ComponentActivity() {
@@ -20,7 +20,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = colorScheme.surface
                 ) {
-                    HomeScreen()
+                    BmiScreen()
                 }
             }
         }

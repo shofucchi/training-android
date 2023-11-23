@@ -30,9 +30,9 @@ import io.github.shofucchi.bmi.R
 import io.github.shofucchi.bmi.ui.theme.BmiTheme
 
 @Composable
-fun HomeScreen(homeViewModel: HomeViewModel = viewModel()) {
+fun BmiScreen(bmiViewModel: BmiViewModel = viewModel()) {
     val containerPadding = dimensionResource(R.dimen.container_padding)
-    val homeUiState = homeViewModel.uiState.collectAsState()
+    val homeUiState = bmiViewModel.uiState.collectAsState()
     Column(
         modifier = Modifier
             .verticalScroll(rememberScrollState())
@@ -52,24 +52,25 @@ fun HomeScreen(homeViewModel: HomeViewModel = viewModel()) {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(containerPadding),
-            homeViewModel = homeViewModel,
-            homeUiState = homeUiState.value
+            bmiViewModel = bmiViewModel,
+            bmiUiState = homeUiState.value
         )
         OutlinedButton(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(containerPadding),
-            onClick = { homeViewModel.reset() }) {
+            onClick = { bmiViewModel.reset() }
+        ) {
             Text(text = "Reset")
         }
     }
 }
 
 @Composable
-fun BmiCard(
+private fun BmiCard(
     modifier: Modifier = Modifier,
-    homeViewModel: HomeViewModel,
-    homeUiState: HomeUiState
+    bmiViewModel: BmiViewModel,
+    bmiUiState: BmiUiState
 ) {
     val containerPadding = dimensionResource(R.dimen.container_padding)
     Card(
@@ -81,15 +82,10 @@ fun BmiCard(
             modifier = Modifier.padding(containerPadding)
         ) {
             BmiOutlinedTextField(
-                value = homeUiState.height,
-                onValueChange = { homeViewModel.enterHeight(it) },
-                onKeyboardDone = {
-                    if (homeUiState.errorReasonHeight == ErrorReason.NONE && homeUiState.errorReasonWeight == ErrorReason.NONE) {
-                        homeViewModel.calculateBmi()
-                    }
-                },
+                value = bmiUiState.height,
+                onValueChange = { bmiViewModel.enterHeight(it) },
                 label = {
-                    val message = when (homeUiState.errorReasonHeight) {
+                    val message = when (bmiUiState.errorReasonHeight) {
                         ErrorReason.NOT_NUMBER -> stringResource(id = R.string.number_only)
                         ErrorReason.TOO_LARGE -> stringResource(id = R.string.too_large)
                         ErrorReason.TOO_SMALL -> stringResource(id = R.string.too_small)
@@ -97,18 +93,13 @@ fun BmiCard(
                     }
                     Text(text = message)
                 },
-                isError = homeUiState.errorReasonHeight != ErrorReason.NONE
+                isError = bmiUiState.errorReasonHeight != ErrorReason.NONE
             )
             BmiOutlinedTextField(
-                value = homeUiState.weight,
-                onValueChange = { homeViewModel.enterWeight(it) },
-                onKeyboardDone = {
-                    if (homeUiState.errorReasonHeight == ErrorReason.NONE && homeUiState.errorReasonWeight == ErrorReason.NONE) {
-                        homeViewModel.calculateBmi()
-                    }
-                },
+                value = bmiUiState.weight,
+                onValueChange = { bmiViewModel.enterWeight(it) },
                 label = {
-                    val message = when (homeUiState.errorReasonWeight) {
+                    val message = when (bmiUiState.errorReasonWeight) {
                         ErrorReason.NOT_NUMBER -> stringResource(id = R.string.number_only)
                         ErrorReason.TOO_LARGE -> stringResource(id = R.string.too_large)
                         ErrorReason.TOO_SMALL -> stringResource(id = R.string.too_small)
@@ -116,17 +107,16 @@ fun BmiCard(
                     }
                     Text(text = message)
                 },
-                isError = homeUiState.errorReasonWeight != ErrorReason.NONE
+                isError = bmiUiState.errorReasonWeight != ErrorReason.NONE
             )
         }
     }
 }
 
 @Composable
-fun BmiOutlinedTextField(
+private fun BmiOutlinedTextField(
     value: String,
     onValueChange: (String) -> Unit,
-    onKeyboardDone: () -> Unit,
     label: @Composable () -> Unit,
     isError: Boolean
 ) {
@@ -137,10 +127,9 @@ fun BmiOutlinedTextField(
         modifier = Modifier.fillMaxSize(),
         label = label,
         keyboardOptions = KeyboardOptions.Default.copy(
-            imeAction = ImeAction.Done,
+            imeAction = ImeAction.Next,
             keyboardType = KeyboardType.Number
         ),
-        keyboardActions = KeyboardActions(onDone = { onKeyboardDone() }),
         colors = TextFieldDefaults.colors(
             focusedContainerColor = colorScheme.surface,
             unfocusedContainerColor = colorScheme.surface,
@@ -153,8 +142,8 @@ fun BmiOutlinedTextField(
 
 @Preview(showBackground = true)
 @Composable
-fun HomeScreenPreview() {
+fun BmiScreenPreview() {
     BmiTheme {
-        HomeScreen()
+        BmiScreen()
     }
 }

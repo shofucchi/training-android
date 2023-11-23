@@ -6,8 +6,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlin.math.pow
 
-class HomeViewModel : ViewModel() {
-    private val _uiState = MutableStateFlow(HomeUiState())
+class BmiViewModel : ViewModel() {
+    private val _uiState = MutableStateFlow(BmiUiState())
     val uiState = _uiState.asStateFlow()
 
     fun enterHeight(height: String) {

@@ -1,6 +1,6 @@
 package io.github.shofucchi.bmi.ui
 
-data class HomeUiState(
+data class BmiUiState(
     val height: String = "",
     val weight: String = "",
     val bmi: Float = 0.0f,
