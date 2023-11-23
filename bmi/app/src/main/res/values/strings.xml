@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">BMI</string>
     <string name="your_bmi">Your BMI: %.1f</string>
+    <string name="number_only">Number only</string>
+    <string name="too_large">Too large</string>
+    <string name="too_small">Too small</string>
+    <string name="height_placeholder">Enter your height: cm</string>
+    <string name="weight_placeholder">Enter your weight: kg</string>
 </resources>

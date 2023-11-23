@@ -69,7 +69,7 @@ fun HomeScreen(homeViewModel: HomeViewModel = viewModel()) {
 fun BmiCard(
     modifier: Modifier = Modifier,
     homeViewModel: HomeViewModel,
-    homeUiState: HomeUiState.Success
+    homeUiState: HomeUiState
 ) {
     val containerPadding = dimensionResource(R.dimen.container_padding)
     Card(
@@ -83,14 +83,40 @@ fun BmiCard(
             BmiOutlinedTextField(
                 value = homeUiState.height,
                 onValueChange = { homeViewModel.enterHeight(it) },
-                onKeyboardDone = { homeViewModel.calculateBmi() },
-                label = { Text(text = "Enter your height") }
+                onKeyboardDone = {
+                    if (homeUiState.errorReasonHeight == ErrorReason.NONE && homeUiState.errorReasonWeight == ErrorReason.NONE) {
+                        homeViewModel.calculateBmi()
+                    }
+                },
+                label = {
+                    val message = when (homeUiState.errorReasonHeight) {
+                        ErrorReason.NOT_NUMBER -> stringResource(id = R.string.number_only)
+                        ErrorReason.TOO_LARGE -> stringResource(id = R.string.too_large)
+                        ErrorReason.TOO_SMALL -> stringResource(id = R.string.too_small)
+                        else -> stringResource(id = R.string.height_placeholder)
+                    }
+                    Text(text = message)
+                },
+                isError = homeUiState.errorReasonHeight != ErrorReason.NONE
             )
             BmiOutlinedTextField(
                 value = homeUiState.weight,
                 onValueChange = { homeViewModel.enterWeight(it) },
-                onKeyboardDone = { homeViewModel.calculateBmi() },
-                label = { Text(text = "Enter your weight") }
+                onKeyboardDone = {
+                    if (homeUiState.errorReasonHeight == ErrorReason.NONE && homeUiState.errorReasonWeight == ErrorReason.NONE) {
+                        homeViewModel.calculateBmi()
+                    }
+                },
+                label = {
+                    val message = when (homeUiState.errorReasonWeight) {
+                        ErrorReason.NOT_NUMBER -> stringResource(id = R.string.number_only)
+                        ErrorReason.TOO_LARGE -> stringResource(id = R.string.too_large)
+                        ErrorReason.TOO_SMALL -> stringResource(id = R.string.too_small)
+                        else -> stringResource(id = R.string.weight_placeholder)
+                    }
+                    Text(text = message)
+                },
+                isError = homeUiState.errorReasonWeight != ErrorReason.NONE
             )
         }
     }
@@ -101,7 +127,8 @@ fun BmiOutlinedTextField(
     value: String,
     onValueChange: (String) -> Unit,
     onKeyboardDone: () -> Unit,
-    label: @Composable () -> Unit
+    label: @Composable () -> Unit,
+    isError: Boolean
 ) {
     OutlinedTextField(
         value = value,
@@ -120,6 +147,7 @@ fun BmiOutlinedTextField(
             disabledContainerColor = colorScheme.surface,
         ),
         shape = shapes.large,
+        isError = isError
     )
 }
 

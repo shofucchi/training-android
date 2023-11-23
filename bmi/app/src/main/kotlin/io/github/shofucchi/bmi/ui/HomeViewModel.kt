@@ -7,24 +7,30 @@ import kotlinx.coroutines.flow.update
 import kotlin.math.pow
 
 class HomeViewModel : ViewModel() {
-    private val _uiState = MutableStateFlow(HomeUiState.Success())
+    private val _uiState = MutableStateFlow(HomeUiState())
     val uiState = _uiState.asStateFlow()
 
     fun enterHeight(height: String) {
-        _uiState.update { it.copy(height = height) }
+        val errorReason = isInvalidHeight(height.toFloatOrNull())
+        if (errorReason != ErrorReason.NONE) {
+            _uiState.update { it.copy(height = height, errorReasonHeight = errorReason) }
+        } else {
+            _uiState.update { it.copy(height = height, errorReasonHeight = ErrorReason.NONE) }
+        }
     }
 
     fun enterWeight(weight: String) {
-        _uiState.update { it.copy(weight = weight) }
+        val errorReason = isInvalidWeight(weight.toFloatOrNull())
+        if (errorReason != ErrorReason.NONE) {
+            _uiState.update { it.copy(weight = weight, errorReasonWeight = errorReason) }
+        } else {
+            _uiState.update { it.copy(weight = weight, errorReasonWeight = ErrorReason.NONE) }
+        }
     }
 
     fun calculateBmi() {
-        val fHeight = _uiState.value.height.toFloatOrNull()
-        val fWeight = _uiState.value.weight.toFloatOrNull()
-        if (fHeight == null || fWeight == null) {
-            // TODO: Show error
-            return
-        }
+        val fHeight = _uiState.value.height.toFloat()
+        val fWeight = _uiState.value.weight.toFloat()
         val bmi = fWeight / (fHeight / 100.0).pow(2.0)
         _uiState.update {
             it.copy(bmi = bmi.toFloat())
@@ -33,7 +39,31 @@ class HomeViewModel : ViewModel() {
 
     fun reset() {
         _uiState.update {
-            it.copy(height = "", weight = "", bmi = 0.0f)
+            it.copy(
+                height = "",
+                weight = "",
+                bmi = 0.0f,
+                errorReasonHeight = ErrorReason.NONE,
+                errorReasonWeight = ErrorReason.NONE
+            )
+        }
+    }
+
+    private fun isInvalidHeight(height: Float?): ErrorReason {
+        return when {
+            height == null -> ErrorReason.NOT_NUMBER
+            height > MAX_HEIGHT -> ErrorReason.TOO_LARGE
+            height < MIN_HEIGHT -> ErrorReason.TOO_SMALL
+            else -> ErrorReason.NONE
+        }
+    }
+
+    private fun isInvalidWeight(weight: Float?): ErrorReason {
+        return when {
+            weight == null -> ErrorReason.NOT_NUMBER
+            weight > MAX_WEIGHT -> ErrorReason.TOO_LARGE
+            weight < MIN_WEIGHT -> ErrorReason.TOO_SMALL
+            else -> ErrorReason.NONE
         }
     }
 }
