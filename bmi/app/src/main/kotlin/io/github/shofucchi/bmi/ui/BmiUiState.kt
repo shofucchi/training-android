@@ -4,12 +4,13 @@ data class BmiUiState(
     val height: String = "",
     val weight: String = "",
     val bmi: Float = 0.0f,
-    val errorReasonHeight: ErrorReason = ErrorReason.NONE,
-    val errorReasonWeight: ErrorReason = ErrorReason.NONE
+    val errorReasonHeight: ErrorReason = ErrorReason.EMPTY,
+    val errorReasonWeight: ErrorReason = ErrorReason.EMPTY
 )
 
 enum class ErrorReason {
     NONE,
+    EMPTY,
     NOT_NUMBER,
     TOO_LARGE,
     TOO_SMALL

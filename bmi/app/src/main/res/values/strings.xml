@@ -6,4 +6,6 @@
     <string name="too_small">Too small</string>
     <string name="height_placeholder">Enter your height: cm</string>
     <string name="weight_placeholder">Enter your weight: kg</string>
+    <string name="calculate">Calculate</string>
+    <string name="reset">Reset</string>
 </resources>

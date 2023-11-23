@@ -11,7 +11,7 @@ class BmiViewModel : ViewModel() {
     val uiState = _uiState.asStateFlow()
 
     fun enterHeight(height: String) {
-        val errorReason = isInvalidHeight(height.toFloatOrNull())
+        val errorReason = isInvalidHeight(height)
         if (errorReason != ErrorReason.NONE) {
             _uiState.update { it.copy(height = height, errorReasonHeight = errorReason) }
         } else {
@@ -20,7 +20,7 @@ class BmiViewModel : ViewModel() {
     }
 
     fun enterWeight(weight: String) {
-        val errorReason = isInvalidWeight(weight.toFloatOrNull())
+        val errorReason = isInvalidWeight(weight)
         if (errorReason != ErrorReason.NONE) {
             _uiState.update { it.copy(weight = weight, errorReasonWeight = errorReason) }
         } else {
@@ -43,26 +43,30 @@ class BmiViewModel : ViewModel() {
                 height = "",
                 weight = "",
                 bmi = 0.0f,
-                errorReasonHeight = ErrorReason.NONE,
-                errorReasonWeight = ErrorReason.NONE
+                errorReasonHeight = ErrorReason.EMPTY,
+                errorReasonWeight = ErrorReason.EMPTY
             )
         }
     }
 
-    private fun isInvalidHeight(height: Float?): ErrorReason {
+    private fun isInvalidHeight(height: String): ErrorReason {
+        val floatHeight = height.toFloatOrNull()
         return when {
-            height == null -> ErrorReason.NOT_NUMBER
-            height > MAX_HEIGHT -> ErrorReason.TOO_LARGE
-            height < MIN_HEIGHT -> ErrorReason.TOO_SMALL
+            height.isEmpty() -> ErrorReason.EMPTY
+            floatHeight == null -> ErrorReason.NOT_NUMBER
+            floatHeight > MAX_HEIGHT -> ErrorReason.TOO_LARGE
+            floatHeight < MIN_HEIGHT -> ErrorReason.TOO_SMALL
             else -> ErrorReason.NONE
         }
     }
 
-    private fun isInvalidWeight(weight: Float?): ErrorReason {
+    private fun isInvalidWeight(weight: String): ErrorReason {
+        val floatWeight = weight.toFloatOrNull()
         return when {
-            weight == null -> ErrorReason.NOT_NUMBER
-            weight > MAX_WEIGHT -> ErrorReason.TOO_LARGE
-            weight < MIN_WEIGHT -> ErrorReason.TOO_SMALL
+            weight.isEmpty() -> ErrorReason.EMPTY
+            floatWeight == null -> ErrorReason.NOT_NUMBER
+            floatWeight > MAX_WEIGHT -> ErrorReason.TOO_LARGE
+            floatWeight < MIN_WEIGHT -> ErrorReason.TOO_SMALL
             else -> ErrorReason.NONE
         }
     }

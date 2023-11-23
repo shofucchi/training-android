@@ -5,9 +5,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.MaterialTheme.shapes
@@ -55,13 +55,22 @@ fun BmiScreen(bmiViewModel: BmiViewModel = viewModel()) {
             bmiViewModel = bmiViewModel,
             bmiUiState = homeUiState.value
         )
+        Button(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(containerPadding),
+            onClick = { bmiViewModel.calculateBmi() },
+            enabled = homeUiState.value.errorReasonHeight == ErrorReason.NONE && homeUiState.value.errorReasonWeight == ErrorReason.NONE
+        ) {
+            Text(text = stringResource(id = R.string.calculate))
+        }
         OutlinedButton(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(containerPadding),
             onClick = { bmiViewModel.reset() }
         ) {
-            Text(text = "Reset")
+            Text(text = stringResource(id = R.string.reset))
         }
     }
 }
@@ -93,7 +102,7 @@ private fun BmiCard(
                     }
                     Text(text = message)
                 },
-                isError = bmiUiState.errorReasonHeight != ErrorReason.NONE
+                isError = bmiUiState.errorReasonHeight != ErrorReason.NONE && bmiUiState.errorReasonHeight != ErrorReason.EMPTY
             )
             BmiOutlinedTextField(
                 value = bmiUiState.weight,
@@ -107,7 +116,7 @@ private fun BmiCard(
                     }
                     Text(text = message)
                 },
-                isError = bmiUiState.errorReasonWeight != ErrorReason.NONE
+                isError = bmiUiState.errorReasonWeight != ErrorReason.NONE && bmiUiState.errorReasonWeight != ErrorReason.EMPTY
             )
         }
     }
