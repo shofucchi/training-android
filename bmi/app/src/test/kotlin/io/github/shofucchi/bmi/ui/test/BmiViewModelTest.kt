@@ -15,14 +15,14 @@ class BmiViewModelTest {
     }
 
     @Test
-    fun bmiViewModel_enterValidHeight_BoundLarge() {
+    fun bmiViewModel_enterMaxValidHeight() {
         viewModel.enterHeight("300.0")
         assertThat(viewModel.uiState.value.height).isEqualTo("300.0")
         assertThat(viewModel.uiState.value.errorReasonHeight).isEqualTo(ErrorReason.NONE)
     }
 
     @Test
-    fun bmiViewModel_enterValidHeight_BoundSmal() {
+    fun bmiViewModel_enterMinValidHeight() {
         viewModel.enterHeight("1.0")
         assertThat(viewModel.uiState.value.height).isEqualTo("1.0")
         assertThat(viewModel.uiState.value.errorReasonHeight).isEqualTo(ErrorReason.NONE)
@@ -57,14 +57,14 @@ class BmiViewModelTest {
     }
 
     @Test
-    fun bmiViewModel_enterValidWeight_BoundLarge() {
+    fun bmiViewModel_enterMaxValidWeight() {
         viewModel.enterWeight("600.0")
         assertThat(viewModel.uiState.value.weight).isEqualTo("600.0")
         assertThat(viewModel.uiState.value.errorReasonWeight).isEqualTo(ErrorReason.NONE)
     }
 
     @Test
-    fun bmiViewModel_enterValidWeight_BoundSmall() {
+    fun bmiViewModel_enterMinValidWeight() {
         viewModel.enterWeight("0.1")
         assertThat(viewModel.uiState.value.weight).isEqualTo("0.1")
         assertThat(viewModel.uiState.value.errorReasonWeight).isEqualTo(ErrorReason.NONE)
