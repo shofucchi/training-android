@@ -8,7 +8,7 @@ This is a simple app learning how to use Jetpack Compose and ViewModel by Mutabl
 - Android Studio Giraffe
 - Android Gradle Plugin 8.1.3
 - Kotlin 1.8.1
-- JVM 1.8.0
+- JDK 8
 
 ## Reference
 - [Jetpack Compose](https://developer.android.com/jetpack/compose)
