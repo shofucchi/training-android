@@ -2,12 +2,14 @@ package io.github.shofucchi.qiita.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import io.github.shofucchi.qiita.data.QiitaLocalDataSource
 import io.github.shofucchi.qiita.data.QiitaRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 interface ArticleViewModel {
     val uiState: StateFlow<ArticleUiState>
@@ -24,15 +26,19 @@ class ArticleViewModelImpl(private val qiitaRepository: QiitaRepository) : ViewM
             get() = object : ViewModelProvider.Factory {
                 @Suppress("UNCHECKED_CAST")
                 override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                    return ArticleViewModelImpl(QiitaRepository(QiitaLocalDataSource())) as T
+//                    val qiitaDataSource = QiitaRemoteDataSource(buildQiitaApi(), Dispatchers.IO)
+                    val qiitaDataSource = QiitaLocalDataSource()
+                    return ArticleViewModelImpl(QiitaRepository(qiitaDataSource)) as T
                 }
             }
     }
 
     override fun fetchArticles() {
-        val articles = qiitaRepository.fetchArticles()
-        _uiState.update {
-            it.copy(articles = articles.map { article -> Article(article.title, article.url) })
+        viewModelScope.launch {
+            val articles = qiitaRepository.fetchArticles()
+            _uiState.update {
+                it.copy(articles = articles.map { article -> Article(article.title, article.url) })
+            }
         }
     }
 }
