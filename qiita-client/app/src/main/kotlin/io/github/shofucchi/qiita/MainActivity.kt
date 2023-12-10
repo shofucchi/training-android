@@ -8,12 +8,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import io.github.shofucchi.qiita.data.AppDatabase
-import io.github.shofucchi.qiita.data.QiitaRepository
-import io.github.shofucchi.qiita.data.buildQiitaApi
-import io.github.shofucchi.qiita.data.QiitaDataSource
-import io.github.shofucchi.qiita.ui.ArticleScreen
-import io.github.shofucchi.qiita.ui.ArticleViewModelImpl
+import io.github.shofucchi.qiita.data.database.AppDatabase
+import io.github.shofucchi.qiita.data.repository.QiitaRepository
+import io.github.shofucchi.qiita.data.api.buildQiitaApi
+import io.github.shofucchi.qiita.data.datasource.QiitaDataSource
+import io.github.shofucchi.qiita.ui.feature.article.ArticleScreen
+import io.github.shofucchi.qiita.ui.feature.article.ArticleViewModelImpl
 import io.github.shofucchi.qiita.ui.theme.QiitaTheme
 import kotlinx.coroutines.Dispatchers
 

@@ -1,4 +1,4 @@
-package io.github.shofucchi.qiita.ui
+package io.github.shofucchi.qiita.ui.feature.article
 
 data class ArticleUiState(
     val articles: List<Article> = emptyList()

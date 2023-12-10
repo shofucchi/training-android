@@ -1,8 +1,9 @@
-package io.github.shofucchi.qiita.data
+package io.github.shofucchi.qiita.data.dao
 
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Upsert
+import io.github.shofucchi.qiita.data.model.Article
 import kotlinx.coroutines.flow.Flow
 
 @Dao

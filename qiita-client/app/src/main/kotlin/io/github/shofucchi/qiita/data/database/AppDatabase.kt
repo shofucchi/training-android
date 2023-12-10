@@ -1,9 +1,11 @@
-package io.github.shofucchi.qiita.data
+package io.github.shofucchi.qiita.data.database
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import io.github.shofucchi.qiita.data.model.Article
+import io.github.shofucchi.qiita.data.dao.ArticleDao
 
 @Database(entities = [Article::class], version = 1)
 abstract class AppDatabase: RoomDatabase() {

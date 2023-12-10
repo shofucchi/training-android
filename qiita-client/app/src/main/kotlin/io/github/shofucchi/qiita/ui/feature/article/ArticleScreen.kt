@@ -1,4 +1,4 @@
-package io.github.shofucchi.qiita.ui
+package io.github.shofucchi.qiita.ui.feature.article
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -14,6 +14,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -28,7 +30,7 @@ fun ArticleScreen(articleViewModel: ArticleViewModel) {
             modifier = Modifier
                 .verticalScroll(rememberScrollState())
                 .padding(it),
-            articleUiState = articleUiState.value
+            articles = articleUiState.value.articles
         )
     }
 }
@@ -40,9 +42,9 @@ fun ArticleAppBar() {
 }
 
 @Composable
-fun ArticleList(modifier: Modifier, articleUiState: ArticleUiState) {
+fun ArticleList(modifier: Modifier, articles: List<Article>) {
     Column(modifier = modifier) {
-        for (article in articleUiState.articles) {
+        for (article in articles) {
             ArticleListItem(title = article.title) {
                 println(article.url)
             }

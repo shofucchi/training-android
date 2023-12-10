@@ -1,4 +1,4 @@
-package io.github.shofucchi.qiita.data
+package io.github.shofucchi.qiita.data.model
 
 import kotlinx.serialization.Serializable
 

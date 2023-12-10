@@ -1,5 +1,8 @@
-package io.github.shofucchi.qiita.data
+package io.github.shofucchi.qiita.data.datasource
 
+import io.github.shofucchi.qiita.data.dao.ArticleDao
+import io.github.shofucchi.qiita.data.api.QiitaApi
+import io.github.shofucchi.qiita.data.model.toArticle
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext

@@ -1,9 +1,9 @@
-package io.github.shofucchi.qiita.ui
+package io.github.shofucchi.qiita.ui.feature.article
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import io.github.shofucchi.qiita.data.QiitaRepository
+import io.github.shofucchi.qiita.data.repository.QiitaRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
