@@ -1,8 +1,24 @@
 package io.github.shofucchi.qiita.data
 
-class QiitaLocalDataSource : QiitaDataSource {
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.withContext
 
-    override suspend fun fetchArticles(): List<QiitaApiModel> = json.decodeFromString<List<QiitaApiModel>>(stubJson)
+class QiitaLocalDataSource(
+    private val articleDao: ArticleDao,
+    private val ioDispatcher: CoroutineDispatcher
+) : QiitaDataSource {
+
+    override suspend fun fetchArticles(): List<Article> = withContext(ioDispatcher) {
+        try {
+            json.decodeFromString<List<QiitaApiModel>>(stubJson)
+                .map { it.toArticle() }
+                .let { articleDao.upsertAll(it) }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return@withContext articleDao.getAll().first()
+    }
 }
 
 private val stubJson = """
