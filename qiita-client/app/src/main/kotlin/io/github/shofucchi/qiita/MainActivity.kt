@@ -7,15 +7,16 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import io.github.shofucchi.qiita.data.database.AppDatabase
+import io.github.shofucchi.qiita.data.datasource.RetrofitQiitaDataSource
 import io.github.shofucchi.qiita.data.repository.QiitaRepository
-import io.github.shofucchi.qiita.data.api.buildQiitaApi
-import io.github.shofucchi.qiita.data.datasource.QiitaDataSource
 import io.github.shofucchi.qiita.ui.feature.article.ArticleScreen
-import io.github.shofucchi.qiita.ui.feature.article.ArticleViewModelImpl
+import io.github.shofucchi.qiita.ui.feature.article.ArticleViewModel
 import io.github.shofucchi.qiita.ui.theme.QiitaTheme
 import kotlinx.coroutines.Dispatchers
+import kotlinx.serialization.json.Json
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,17 +28,16 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    val articleViewModel: ArticleViewModelImpl by viewModels {
-                        val database = AppDatabase.instance(applicationContext)
-                        val qiitaDataSource = QiitaDataSource(
-                            database.articleDao(),
-                            buildQiitaApi(),
+                    val articleViewModel: ArticleViewModel by viewModels {
+                        val qiitaRepository = QiitaRepository(
+                            RetrofitQiitaDataSource(Json { ignoreUnknownKeys = true }),
+                            AppDatabase.instance(applicationContext).articleDao(),
                             Dispatchers.IO
                         )
-                        val qiitaRepository = QiitaRepository(qiitaDataSource)
-                        ArticleViewModelImpl.Factory(qiitaRepository)
+                        ArticleViewModel.Factory(qiitaRepository)
                     }
-                    ArticleScreen(articleViewModel = articleViewModel)
+                    val articleUiState = articleViewModel.uiState.collectAsState().value
+                    ArticleScreen(articleUiState = articleUiState)
                 }
             }
         }

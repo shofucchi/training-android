@@ -13,24 +13,19 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun ArticleScreen(articleViewModel: ArticleViewModel) {
-    articleViewModel.fetchArticles()
-    val articleUiState = articleViewModel.uiState.collectAsState()
+fun ArticleScreen(articleUiState: ArticleUiState) {
     Scaffold(topBar = { ArticleAppBar() }) {
         ArticleList(
             modifier = Modifier
                 .verticalScroll(rememberScrollState())
                 .padding(it),
-            articles = articleUiState.value.articles
+            articles = articleUiState.articles
         )
     }
 }
@@ -70,5 +65,11 @@ fun ArticleListItem(title: String, onClick: () -> Unit) {
 @Preview(showBackground = true)
 @Composable
 fun ArticleScreenPreview() {
-    ArticleScreen(articleViewModel = ArticleViewModelFake())
+    val articleUiState = ArticleUiState().copy(articles = (0..100).map { index ->
+        Article(
+            "Article $index",
+            "https://example.com"
+        )
+    })
+    ArticleScreen(articleUiState = articleUiState)
 }
