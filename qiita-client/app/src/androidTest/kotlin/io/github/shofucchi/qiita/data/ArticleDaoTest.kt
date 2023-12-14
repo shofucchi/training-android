@@ -7,7 +7,12 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
 import io.github.shofucchi.qiita.data.dao.ArticleDao
 import io.github.shofucchi.qiita.data.database.AppDatabase
-import io.github.shofucchi.qiita.data.model.Article
+import io.github.shofucchi.qiita.utility.articleA
+import io.github.shofucchi.qiita.utility.articleB
+import io.github.shofucchi.qiita.utility.articleC
+import io.github.shofucchi.qiita.utility.articleD
+import io.github.shofucchi.qiita.utility.articleE
+import io.github.shofucchi.qiita.utility.articleF
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.After
@@ -20,9 +25,6 @@ import org.junit.runner.RunWith
 class ArticleDaoTest {
     private lateinit var database: AppDatabase
     private lateinit var articleDao: ArticleDao
-    private val articleA = Article("1", "A", "https://www.example.com", "1", "1")
-    private val articleB = Article("2", "B", "https://www.example.com", "1", "1")
-    private val articleC = Article("3", "C", "https://www.example.com", "2", "2")
 
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
@@ -57,9 +59,6 @@ class ArticleDaoTest {
 
     @Test
     fun testUpsertAll() = runBlocking {
-        val articleD = Article("4", "D", "https://www.example.com", "3", "3")
-        val articleE = Article("5", "E", "https://www.example.com", "3", "3")
-        val articleF = Article("6", "F", "https://www.example.com", "3", "3")
         articleDao.upsertAll(listOf(articleD, articleE, articleF))
         val articleList = articleDao.getAll().first()
         assertThat(articleList.size).isEqualTo(6)

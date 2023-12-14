@@ -6,5 +6,7 @@ data class ArticleUiState(
 
 data class Article(
     val title: String,
-    val url: String
+    val url: String,
+    val profileImageUrl: String,
+    val updatedAt: String?
 )

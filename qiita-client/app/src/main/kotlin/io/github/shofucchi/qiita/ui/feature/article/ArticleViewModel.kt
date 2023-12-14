@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import io.github.shofucchi.qiita.data.repository.QiitaRepository
+import io.github.shofucchi.qiita.utility.toDate
+import io.github.shofucchi.qiita.utility.toFormattedString
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -28,7 +30,14 @@ class ArticleViewModel(private val qiitaRepository: QiitaRepository) : ViewModel
         viewModelScope.launch {
             val articles = qiitaRepository.getArticles()
             _uiState.update {
-                it.copy(articles = articles.map { article -> Article(article.title, article.url) })
+                it.copy(articles = articles.map { article ->
+                    Article(
+                        article.title,
+                        article.url,
+                        article.profileImageUrl,
+                        article.updatedAt.toDate()?.toFormattedString()
+                    )
+                })
             }
         }
     }

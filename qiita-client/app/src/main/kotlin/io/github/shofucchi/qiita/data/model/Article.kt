@@ -9,6 +9,7 @@ data class Article(
     @PrimaryKey val id: String,
     val title: String,
     val url: String,
+    @ColumnInfo(name = "profile_image_url") val profileImageUrl: String,
     @ColumnInfo(name = "created_at") val createdAt: String,
     @ColumnInfo(name = "updated_at") val updatedAt: String
 )
