@@ -3,43 +3,30 @@ package io.github.shofucchi.qiita.ui.feature.article
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.BrokenImage
 import androidx.compose.material3.Divider
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.vector.rememberVectorPainter
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
 import io.github.shofucchi.qiita.R
+import io.github.shofucchi.qiita.ui.feature.article.component.ArticleListItem
 import io.github.shofucchi.qiita.ui.feature.common.LoadingScreen
+import io.github.shofucchi.qiita.ui.feature.common.component.AppBar
+import io.github.shofucchi.qiita.ui.feature.common.consts.AppBarTitleConst
 import io.github.shofucchi.qiita.utility.toDate
 import io.github.shofucchi.qiita.utility.toFormattedString
 
 @Composable
 fun ArticleScreen(articleUiState: ArticleUiState) {
-    Scaffold(topBar = { ArticleAppBar() }) {
+    Scaffold(topBar = { AppBar(appBarTitleConst = AppBarTitleConst.Article) }) {
         if (articleUiState.isLoading) {
             LoadingScreen(
                 modifier = Modifier
@@ -58,11 +45,6 @@ fun ArticleScreen(articleUiState: ArticleUiState) {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun ArticleAppBar() {
-    TopAppBar(title = { Text(text = "Article") })
-}
 
 @Composable
 fun ArticleList(modifier: Modifier, articles: List<Article>, context: Context) {
@@ -81,44 +63,6 @@ fun ArticleList(modifier: Modifier, articles: List<Article>, context: Context) {
     }
 }
 
-@Composable
-fun ArticleListItem(
-    title: String,
-    profileImageUrl: String? = null,
-    updatedAt: String,
-    onClick: () -> Unit
-) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .clickable { onClick() }
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-        horizontalAlignment = Alignment.Start
-    ) {
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            AsyncImage(
-                modifier = Modifier
-                    .size(32.dp)
-                    .clip(CircleShape),
-                contentScale = ContentScale.Crop,
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(profileImageUrl)
-                    .crossfade(true)
-                    .build(),
-                error = rememberVectorPainter(image = Icons.Default.BrokenImage),
-                contentDescription = "Profile Image"
-            )
-            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                Text(text = title)
-                Text(text = updatedAt)
-            }
-        }
-    }
-}
 
 @Preview(showBackground = true)
 @Composable

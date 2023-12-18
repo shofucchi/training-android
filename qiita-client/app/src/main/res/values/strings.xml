@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Qiita</string>
     <string name="invalid_updated_at">----/--/--</string>
+    <string name="article">Article</string>
 </resources>
