@@ -28,16 +28,20 @@ class ArticleViewModel(private val qiitaRepository: QiitaRepository) : ViewModel
 
     private fun getArticles() {
         viewModelScope.launch {
+            _uiState.update { it.copy(isLoading = true) }
             val articles = qiitaRepository.getArticles()
             _uiState.update {
-                it.copy(articles = articles.map { article ->
-                    Article(
-                        article.title,
-                        article.url,
-                        article.profileImageUrl,
-                        article.updatedAt.toDate()?.toFormattedString()
-                    )
-                })
+                it.copy(
+                    articles = articles.map { article ->
+                        Article(
+                            article.title,
+                            article.url,
+                            article.profileImageUrl,
+                            article.updatedAt.toDate()?.toFormattedString()
+                        )
+                    },
+                    isLoading = false
+                )
             }
         }
     }

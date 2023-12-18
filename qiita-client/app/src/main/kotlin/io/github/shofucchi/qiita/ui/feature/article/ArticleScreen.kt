@@ -1,5 +1,8 @@
 package io.github.shofucchi.qiita.ui.feature.article
 
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -30,18 +33,28 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import io.github.shofucchi.qiita.R
+import io.github.shofucchi.qiita.ui.feature.common.LoadingScreen
 import io.github.shofucchi.qiita.utility.toDate
 import io.github.shofucchi.qiita.utility.toFormattedString
 
 @Composable
 fun ArticleScreen(articleUiState: ArticleUiState) {
     Scaffold(topBar = { ArticleAppBar() }) {
-        ArticleList(
-            modifier = Modifier
-                .verticalScroll(rememberScrollState())
-                .padding(it),
-            articles = articleUiState.articles
-        )
+        if (articleUiState.isLoading) {
+            LoadingScreen(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(it)
+            )
+        } else {
+            ArticleList(
+                modifier = Modifier
+                    .verticalScroll(rememberScrollState())
+                    .padding(it),
+                articles = articleUiState.articles,
+                context = LocalContext.current
+            )
+        }
     }
 }
 
@@ -52,7 +65,7 @@ fun ArticleAppBar() {
 }
 
 @Composable
-fun ArticleList(modifier: Modifier, articles: List<Article>) {
+fun ArticleList(modifier: Modifier, articles: List<Article>, context: Context) {
     Column(modifier = modifier) {
         for (article in articles) {
             ArticleListItem(
@@ -60,7 +73,8 @@ fun ArticleList(modifier: Modifier, articles: List<Article>) {
                 profileImageUrl = article.profileImageUrl,
                 updatedAt = article.updatedAt ?: stringResource(id = R.string.invalid_updated_at)
             ) {
-                println(article.url)
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(article.url))
+                context.startActivity(intent)
             }
             Divider(modifier = Modifier.padding(horizontal = 16.dp))
         }
@@ -109,13 +123,16 @@ fun ArticleListItem(
 @Preview(showBackground = true)
 @Composable
 fun ArticleScreenPreview() {
-    val articleUiState = ArticleUiState().copy(articles = (0..100).map { index ->
-        Article(
-            "Article $index",
-            "https://example.com",
-            "https://example.com/profile_image.png",
-            "1970-01-01T00:00:00+00:00".toDate()?.toFormattedString()
-        )
-    })
+    val articleUiState = ArticleUiState().copy(
+        articles = (0..100).map { index ->
+            Article(
+                "Article $index",
+                "https://example.com",
+                "https://example.com/profile_image.png",
+                "1970-01-01T00:00:00+00:00".toDate()?.toFormattedString()
+            )
+        },
+        isLoading = false
+    )
     ArticleScreen(articleUiState = articleUiState)
 }
