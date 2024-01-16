@@ -3,6 +3,8 @@ package io.github.shofucchi.qiita.ui.feature.article
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import io.github.shofucchi.qiita.data.model.ApiResult
+import io.github.shofucchi.qiita.data.model.AppError
 import io.github.shofucchi.qiita.data.repository.QiitaRepository
 import io.github.shofucchi.qiita.utility.toDate
 import io.github.shofucchi.qiita.utility.toFormattedString
@@ -29,7 +31,8 @@ class ArticleViewModel(private val qiitaRepository: QiitaRepository) : ViewModel
     private fun getArticles() {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
-            val articles = qiitaRepository.getArticles()
+            val result = qiitaRepository.getArticles()
+            val articles = qiitaRepository.getArticlesFromCache()
             _uiState.update {
                 it.copy(
                     articles = articles.map { article ->
@@ -40,7 +43,14 @@ class ArticleViewModel(private val qiitaRepository: QiitaRepository) : ViewModel
                             article.updatedAt.toDate()?.toFormattedString()
                         )
                     },
-                    isLoading = false
+                    isLoading = false,
+                    errorReason = if (result is ApiResult.Failure) {
+                        when (result.error) {
+                            AppError.NetworkError -> ErrorReason.NETWORK_ERROR
+                            AppError.HttpError -> ErrorReason.HTTP_ERROR
+                            AppError.UnknownError -> ErrorReason.UNKNOWN_ERROR
+                        }
+                    } else null
                 )
             }
         }

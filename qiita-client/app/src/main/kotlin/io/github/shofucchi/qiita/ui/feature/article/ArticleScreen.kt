@@ -20,6 +20,7 @@ import io.github.shofucchi.qiita.R
 import io.github.shofucchi.qiita.ui.feature.article.component.ArticleListItem
 import io.github.shofucchi.qiita.ui.feature.common.LoadingScreen
 import io.github.shofucchi.qiita.ui.feature.common.component.AppBar
+import io.github.shofucchi.qiita.ui.feature.common.component.ErrorToast
 import io.github.shofucchi.qiita.ui.feature.common.consts.AppBarTitleConst
 import io.github.shofucchi.qiita.utility.toDate
 import io.github.shofucchi.qiita.utility.toFormattedString
@@ -34,6 +35,12 @@ fun ArticleScreen(articleUiState: ArticleUiState) {
                     .padding(it)
             )
         } else {
+            if (articleUiState.errorReason != null) {
+                ErrorToast(
+                    context = LocalContext.current,
+                    errorReason = articleUiState.errorReason
+                )
+            }
             ArticleList(
                 modifier = Modifier
                     .verticalScroll(rememberScrollState())
