@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Qiita</string>
+    <string name="invalid_updated_at">----/--/--</string>
+    <string name="article">Article</string>
+    <string name="network_error">ネットワーク接続に失敗しました。しばらくしてから再度お試しください。</string>
+    <string name="http_error">記事の取得に失敗しました。しばらくしてから再度お試しください。</string>
+    <string name="unknown_error">記事の取得に失敗しました。しばらくしてから再度お試しください。</string>
+</resources>
